@@ -1,0 +1,44 @@
+<form #loginForm="ngForm" (ngSubmit)="onLogin()">
+  <mat-form-field>
+    <mat-label>Username</mat-label>
+    <input
+      type="text"
+      matInput
+      required
+      maxlength="13"
+      [(ngModel)]="userLoginModel.username"
+      name="username"
+    />
+    <mat-hint align="end">{{ userLoginModel.username.length }}/13</mat-hint>
+    <mat-hint *ngIf="loginForm.getError('required', 'username')"
+      >Username is required!</mat-hint
+    >
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Password</mat-label>
+    <input
+      minlength="5"
+      required
+      appContainsCharacterAndNumber
+      matInput
+      type="password"
+      [(ngModel)]="userLoginModel.password"
+      name="password"
+    />
+
+    @if (
+      loginForm.controls["password"].dirty &&
+      loginForm.getError("minlength", "password")
+    ) {
+      <mat-hint align="end"
+        >Min length of password should be 5 characters!</mat-hint
+      >
+    } @else if (loginForm.getError("containsCahracterAndNumber", "password")) {
+      <mat-hint align="end"
+        >Password should contains min one number and one letter</mat-hint
+      >
+    }
+  </mat-form-field>
+
+  <button mat-raised-button [disabled]="loginForm.invalid">Basic</button>
+</form>
