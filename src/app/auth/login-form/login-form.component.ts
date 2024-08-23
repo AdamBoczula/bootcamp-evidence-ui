@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgForm } from '@angular/forms';
 import { UserLoginType } from '../models/userLogin';
 import { CommonModule } from '@angular/common';
 import { ValidatorsModule } from '../../validators/validators.module';
@@ -20,9 +20,14 @@ import { ValidatorsModule } from '../../validators/validators.module';
   styleUrl: './login-form.component.scss',
 })
 export class LoginFormComponent {
+  @ViewChild('loginForm')
+  public loginForm!: NgForm;
   public userLoginModel: UserLoginType = { password: '', username: '' };
 
   public onLogin(): void {
-    console.log('🚀 ~ LoginFormComponent ~ onLogin ~ onLogin:');
+    console.log(
+      '🚀 ~ LoginFormComponent ~ onLogin ~ loginForm:',
+      this.loginForm,
+    );
   }
 }

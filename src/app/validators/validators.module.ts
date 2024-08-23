@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ContainsCharacterAndNumberDirective } from './contains-character-and-number.directive';
+import { ContainsLetterAndNumberValidatorDirective } from './contains-letter-and-number.directive';
 
 @NgModule({
-  declarations: [ContainsCharacterAndNumberDirective],
+  declarations: [ContainsLetterAndNumberValidatorDirective],
   imports: [CommonModule],
-  exports: [ContainsCharacterAndNumberDirective],
+  exports: [ContainsLetterAndNumberValidatorDirective],
 })
 export class ValidatorsModule {}
