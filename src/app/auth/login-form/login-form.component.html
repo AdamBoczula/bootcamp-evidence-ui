@@ -1,11 +1,10 @@
-<form #loginForm="ngForm" (ngSubmit)="onLogin()">
+<form class="login-form" #loginForm="ngForm" (ngSubmit)="onLogin()">
   <mat-form-field>
     <mat-label>Username</mat-label>
     <input
       type="text"
       matInput
       required
-      containsLetterAndNumber
       maxlength="13"
       [(ngModel)]="userLoginModel.username"
       name="username"
@@ -24,6 +23,7 @@
     <input
       minlength="5"
       required
+      containsLetterAndNumber
       matInput
       type="password"
       [(ngModel)]="userLoginModel.password"
@@ -41,5 +41,5 @@
     }
   </mat-form-field>
 
-  <button mat-raised-button>Basic</button>
+  <button mat-raised-button [disabled]="loginForm.invalid">Login</button>
 </form>

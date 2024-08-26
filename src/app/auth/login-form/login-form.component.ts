@@ -25,9 +25,7 @@ export class LoginFormComponent {
   public userLoginModel: UserLoginType = { password: '', username: '' };
 
   public onLogin(): void {
-    console.log(
-      '🚀 ~ LoginFormComponent ~ onLogin ~ loginForm:',
-      this.loginForm,
-    );
+    // if (this.loginForm.invalid) return;
+    this.loginForm.resetForm({ password: '', username: '' });
   }
 }
