@@ -11,7 +11,7 @@ import { LoginContainerComponent } from './auth/login-container/login-container.
       [headerTitle]="title"
       (onTitleClick)="onTitleClick()"
     />
-    <app-login-container /> `,
+    <router-outlet /> `,
   styleUrl: './app.component.scss',
 })
 export class AppComponent {
