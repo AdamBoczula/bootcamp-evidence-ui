@@ -13,7 +13,11 @@ export class AuthService {
   public login({ password, username }: UserLoginType): boolean {
     console.log('🚀 ~ AuthService ~ login ~ username:', username);
     console.log('🚀 ~ AuthService ~ login ~ password:', password);
-    return password === USER.password && username === USER.username;
+    const isValid = password === USER.password && username === USER.username;
+    if (!isValid) return false;
+    this._isUserLoggedIn$.next(true);
+    return true;
   }
+
   public logout(): void {}
 }
