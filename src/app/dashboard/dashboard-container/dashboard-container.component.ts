@@ -1,16 +1,11 @@
 import { Component } from '@angular/core';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard-container',
   standalone: true,
-  imports: [],
-  template: `
-    <p>
-      dashboard-container works!
-    </p>
-  `,
-  styleUrl: './dashboard-container.component.scss'
+  imports: [RouterModule],
+  template: ` <a [routerLink]="['/login']">Back to login</a> `,
+  styleUrl: './dashboard-container.component.scss',
 })
-export class DashboardContainerComponent {
-
-}
+export class DashboardContainerComponent {}

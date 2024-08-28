@@ -1,10 +1,10 @@
-import { Component, ViewChild } from '@angular/core';
-import { MatInputModule } from '@angular/material/input';
-import { MatButtonModule } from '@angular/material/button';
-import { FormsModule, NgForm } from '@angular/forms';
-import { UserLoginType } from '../models/userLogin';
 import { CommonModule } from '@angular/common';
+import { Component, EventEmitter, Output, ViewChild } from '@angular/core';
+import { FormsModule, NgForm } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatInputModule } from '@angular/material/input';
 import { ValidatorsModule } from '../../validators/validators.module';
+import { UserLoginType } from '../models/userLogin';
 
 @Component({
   selector: 'app-login-form',
@@ -24,8 +24,11 @@ export class LoginFormComponent {
   public loginForm!: NgForm;
   public userLoginModel: UserLoginType = { password: '', username: '' };
 
+  @Output()
+  public onSubmit = new EventEmitter<UserLoginType>();
+
   public onLogin(): void {
-    // if (this.loginForm.invalid) return;
+    this.onSubmit.emit(this.userLoginModel);
     this.loginForm.resetForm({ password: '', username: '' });
   }
 }
