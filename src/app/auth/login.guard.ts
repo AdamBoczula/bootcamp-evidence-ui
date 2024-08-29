@@ -1,11 +1,18 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router, UrlTree } from '@angular/router';
+import { AuthService } from './auth.service';
+import { map } from 'rxjs';
 
-export const loginGuard: CanActivateFn = (route, state): UrlTree | boolean => {
+export const loginGuard: CanActivateFn = (route, state) => {
   console.log('🚀 ~ state:', state);
   console.log('🚀 ~ route:', route);
-
-  // const canEnter = !!Math.round(Math.random());
   const url: UrlTree = inject(Router).createUrlTree(['/login']);
-  return true || url;
+
+  return inject(AuthService).isUserLoggedIn$.pipe(
+    map((isLoggedIn) => {
+      console.log('🚀 ~ map ~ isLoggedIn:', isLoggedIn);
+
+      return isLoggedIn || url;
+    }),
+  );
 };

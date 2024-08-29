@@ -11,8 +11,6 @@ export class AuthService {
   public isUserLoggedIn$ = this._isUserLoggedIn$.asObservable();
 
   public login({ password, username }: UserLoginType): boolean {
-    console.log('🚀 ~ AuthService ~ login ~ username:', username);
-    console.log('🚀 ~ AuthService ~ login ~ password:', password);
     const isValid = password === USER.password && username === USER.username;
     if (!isValid) return false;
     this._isUserLoggedIn$.next(true);
