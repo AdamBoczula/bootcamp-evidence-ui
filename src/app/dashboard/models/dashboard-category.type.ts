@@ -3,3 +3,8 @@ export interface DashboardCategory {
   icon: string;
   color: string;
 }
+
+export interface CategoryWithCost {
+  category: DashboardCategory;
+  cost: number;
+}
