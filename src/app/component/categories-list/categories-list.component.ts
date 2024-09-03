@@ -1,10 +1,22 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, Input } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  inject,
+  Input,
+  OnChanges,
+  OnDestroy,
+  Output,
+  SimpleChanges,
+} from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { DashboardCategory } from '../../dashboard/models/dashboard-category.type';
-import { CategoriesListItemComponent } from '../categories-list-item/categories-list-item.component';
+import {
+  CategoryWithSubcategories,
+  DashboardCategory,
+} from '../../dashboard/models/dashboard-category.type';
 import { AddCostFormComponent } from '../add-cost-form/add-cost-form.component';
-import { DialogRef } from '@angular/cdk/dialog';
+import { CategoriesListItemComponent } from '../categories-list-item/categories-list-item.component';
+import { Observable, ObservedValueOf, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-categories-list',
@@ -24,20 +36,44 @@ import { DialogRef } from '@angular/cdk/dialog';
   `,
   styleUrl: './categories-list.component.scss',
 })
-export class CategoriesListComponent {
+export class CategoriesListComponent implements OnDestroy, OnChanges {
   private readonly dialog: MatDialog = inject(MatDialog);
   private dialogRef!: MatDialogRef<AddCostFormComponent, any>;
+  public subs?: Subscription;
+  @Output()
+  onCategoryClick = new EventEmitter<DashboardCategory>();
 
   @Input({ required: true })
   public categoriesList: DashboardCategory[] = [];
 
-  public openDialog(category: DashboardCategory): void {
-    this.dialogRef = this.dialog.open(AddCostFormComponent, {
-      data: category,
-    });
+  @Input()
+  public categoryWithSubcategories$:
+    | Observable<CategoryWithSubcategories>
+    | undefined;
 
-    this.dialogRef.afterClosed().subscribe((result: any) => {
-      console.log('The dialog was closed:', result);
+  public openDialog(category: DashboardCategory): void {
+    this.onCategoryClick.emit(category);
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    (
+      changes['categoryWithSubcategories$'].currentValue as
+        | Observable<CategoryWithSubcategories>
+        | undefined
+    )?.subscribe((categoryWithSubcategories: CategoryWithSubcategories) => {
+      this.subs = this.categoryWithSubcategories$?.subscribe(
+        (categoryWithSub: CategoryWithSubcategories) => {
+          this.dialogRef = this.dialog.open(AddCostFormComponent, {
+            data: categoryWithSubcategories,
+          });
+          this.dialogRef.afterClosed().subscribe((result: any) => {
+            console.log('The dialog was closed:', result);
+          });
+        },
+      );
     });
+  }
+  ngOnDestroy(): void {
+    this.subs?.unsubscribe();
   }
 }

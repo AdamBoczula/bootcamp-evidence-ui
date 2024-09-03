@@ -15,7 +15,5 @@ import { HeaderComponent } from './components/header/header.component';
 })
 export class AppComponent {
   public title = 'Cost Evidence';
-  public onTitleClick(): void {
-    console.log('onTitleClick!');
-  }
+  public onTitleClick(): void {}
 }

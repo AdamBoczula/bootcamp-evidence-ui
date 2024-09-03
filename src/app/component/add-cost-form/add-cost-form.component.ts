@@ -3,7 +3,6 @@ import { Component, Inject } from '@angular/core';
 import {
   FormControl,
   FormGroup,
-  MinValidator,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
@@ -21,9 +20,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import {
   CategoryWithCost,
+  CategoryWithSubcategories,
   DashboardCategory,
 } from '../../dashboard/models/dashboard-category.type';
-import { containsLetterAndNumberValidator } from '../../validators/contains-letter-and-number.directive';
+import { MatChipsModule } from '@angular/material/chips';
 
 @Component({
   selector: 'app-add-cost-form',
@@ -39,9 +39,12 @@ import { containsLetterAndNumberValidator } from '../../validators/contains-lett
     ReactiveFormsModule,
     CommonModule,
     MatFormFieldModule,
+    MatChipsModule,
   ],
   template: `
     <h2 mat-dialog-title>Add {{ category.title }}</h2>
+
+    {{ costForm.controls['cost'].value | json }}
 
     <mat-dialog-content>
       <mat-icon
@@ -56,6 +59,12 @@ import { containsLetterAndNumberValidator } from '../../validators/contains-lett
           <mat-label>Cost</mat-label>
           <input type="number" matInput formControlName="cost" />
         </mat-form-field>
+
+        <mat-chip-set aria-label="Subcategories selection">
+          @for (subcategory of category.subcategories; track $index) {
+            <mat-chip>{{ subcategory.name }}</mat-chip>
+          }
+        </mat-chip-set>
       </form>
     </mat-dialog-content>
     <mat-dialog-actions>
@@ -75,7 +84,7 @@ export class AddCostFormComponent {
   };
   constructor(
     public dialogRef: MatDialogRef<AddCostFormComponent, CategoryWithCost>,
-    @Inject(MAT_DIALOG_DATA) public category: DashboardCategory,
+    @Inject(MAT_DIALOG_DATA) public category: CategoryWithSubcategories,
   ) {}
 
   public saveCost(): void {
@@ -86,7 +95,3 @@ export class AddCostFormComponent {
     return this.costForm.get('cost')!.value as number;
   }
 }
-
-/*
-
-*/

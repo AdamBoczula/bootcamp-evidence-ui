@@ -1,4 +1,16 @@
 :host {
+  mat-dialog-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3rem;
+
+    mat-form-field {
+      width: 100%;
+    }
+  }
+
   mat-icon {
     width: 6rem;
     height: 6rem;

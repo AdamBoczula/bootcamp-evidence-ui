@@ -38,9 +38,6 @@ export class CategoriesListItemComponent {
 
   @HostListener('click', ['$event.target'])
   hostClicked(): void {
-    console.log(
-      '🚀 ~ CategoriesListItemComponent ~ hostClicked ~ hostClicked:',
-    );
     this.categoryClicked.emit(this.category);
   }
 }
