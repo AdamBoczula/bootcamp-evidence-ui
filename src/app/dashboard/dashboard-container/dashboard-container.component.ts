@@ -18,7 +18,6 @@ import {
       <app-categories-list
         [categoriesList]="(categoriesList$ | async) ?? []"
         (onCategoryClick)="fetchSubcategories($event)"
-        [categoryWithSubcategories$]="categoryWithSubcategories$"
       />
     }
   `,
@@ -40,7 +39,6 @@ export class DashboardContainerComponent {
   }
 
   public fetchSubcategories(dashboardCategory: DashboardCategory): void {
-    this.categoryWithSubcategories$ =
-      this.dashboardService.fetchSubcategoriesByCategory(dashboardCategory);
+    this.dashboardService.openCostModal(dashboardCategory);
   }
 }

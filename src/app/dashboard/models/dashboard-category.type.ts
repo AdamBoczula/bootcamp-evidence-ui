@@ -8,6 +8,7 @@ export interface DashboardCategory {
 export interface CategoryWithCost {
   category: DashboardCategory;
   cost: number;
+  subcategory?: string;
 }
 
 export interface Subcategory {

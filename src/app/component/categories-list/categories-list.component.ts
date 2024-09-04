@@ -10,13 +10,13 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { Observable, Subscription } from 'rxjs';
 import {
   CategoryWithSubcategories,
   DashboardCategory,
 } from '../../dashboard/models/dashboard-category.type';
 import { AddCostFormComponent } from '../add-cost-form/add-cost-form.component';
 import { CategoriesListItemComponent } from '../categories-list-item/categories-list-item.component';
-import { Observable, ObservedValueOf, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-categories-list',
@@ -36,44 +36,14 @@ import { Observable, ObservedValueOf, Subscription } from 'rxjs';
   `,
   styleUrl: './categories-list.component.scss',
 })
-export class CategoriesListComponent implements OnDestroy, OnChanges {
-  private readonly dialog: MatDialog = inject(MatDialog);
-  private dialogRef!: MatDialogRef<AddCostFormComponent, any>;
-  public subs?: Subscription;
+export class CategoriesListComponent {
   @Output()
   onCategoryClick = new EventEmitter<DashboardCategory>();
 
   @Input({ required: true })
   public categoriesList: DashboardCategory[] = [];
 
-  @Input()
-  public categoryWithSubcategories$:
-    | Observable<CategoryWithSubcategories>
-    | undefined;
-
   public openDialog(category: DashboardCategory): void {
     this.onCategoryClick.emit(category);
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    (
-      changes['categoryWithSubcategories$'].currentValue as
-        | Observable<CategoryWithSubcategories>
-        | undefined
-    )?.subscribe((categoryWithSubcategories: CategoryWithSubcategories) => {
-      this.subs = this.categoryWithSubcategories$?.subscribe(
-        (categoryWithSub: CategoryWithSubcategories) => {
-          this.dialogRef = this.dialog.open(AddCostFormComponent, {
-            data: categoryWithSubcategories,
-          });
-          this.dialogRef.afterClosed().subscribe((result: any) => {
-            console.log('The dialog was closed:', result);
-          });
-        },
-      );
-    });
-  }
-  ngOnDestroy(): void {
-    this.subs?.unsubscribe();
   }
 }

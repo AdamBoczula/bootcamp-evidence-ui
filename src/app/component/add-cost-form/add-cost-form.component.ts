@@ -21,9 +21,8 @@ import { MatInputModule } from '@angular/material/input';
 import {
   CategoryWithCost,
   CategoryWithSubcategories,
-  DashboardCategory,
 } from '../../dashboard/models/dashboard-category.type';
-import { MatChipsModule } from '@angular/material/chips';
+import { ChipSeletorComponent } from '../chip-seletor/chip-seletor.component';
 
 @Component({
   selector: 'app-add-cost-form',
@@ -39,12 +38,14 @@ import { MatChipsModule } from '@angular/material/chips';
     ReactiveFormsModule,
     CommonModule,
     MatFormFieldModule,
-    MatChipsModule,
+    ChipSeletorComponent,
   ],
   template: `
     <h2 mat-dialog-title>Add {{ category.title }}</h2>
 
-    {{ costForm.controls['cost'].value | json }}
+    cost: {{ costForm.controls['cost'].value | json }}
+    <hr />
+    subcategory: {{ costForm.controls['subcategory'].value | json }}
 
     <mat-dialog-content>
       <mat-icon
@@ -60,15 +61,18 @@ import { MatChipsModule } from '@angular/material/chips';
           <input type="number" matInput formControlName="cost" />
         </mat-form-field>
 
-        <mat-chip-set aria-label="Subcategories selection">
-          @for (subcategory of category.subcategories; track $index) {
-            <mat-chip>{{ subcategory.name }}</mat-chip>
-          }
-        </mat-chip-set>
+        @if (category.subcategories && category.subcategories.length > 0) {
+          <app-chip-seletor
+            [chips]="category.subcategories"
+            formControlName="subcategory"
+          />
+        }
       </form>
     </mat-dialog-content>
     <mat-dialog-actions>
-      <button mat-button (click)="saveCost()">Add cost</button>
+      <button mat-button [disabled]="costForm.invalid" (click)="saveCost()">
+        Add cost
+      </button>
       <button mat-button mat-dialog-close>Close</button>
     </mat-dialog-actions>
   `,
@@ -76,7 +80,10 @@ import { MatChipsModule } from '@angular/material/chips';
 })
 export class AddCostFormComponent {
   public costForm = new FormGroup({
-    cost: new FormControl<number | undefined>(undefined, [Validators.min(0)]),
+    cost: new FormControl<number | undefined>(undefined, [
+      Validators.min(0),
+      Validators.required,
+    ]),
     subcategory: new FormControl(''),
   });
   public iconStyle = {
@@ -88,10 +95,18 @@ export class AddCostFormComponent {
   ) {}
 
   public saveCost(): void {
-    this.dialogRef.close({ category: this.category, cost: this.getCost() });
+    this.dialogRef.close({
+      category: this.category,
+      cost: this.getCost(),
+      subcategory: this.subcategory,
+    });
   }
 
   public getCost(): number {
     return this.costForm.get('cost')!.value as number;
+  }
+
+  public get subcategory(): string | undefined {
+    return this.costForm.get('subcategory')?.value ?? undefined;
   }
 }
