@@ -40,7 +40,6 @@ export class DashboardContainerComponent {
   }
 
   public fetchSubcategories(dashboardCategory: DashboardCategory): void {
-    this.categoryWithSubcategories$ =
-      this.dashboardService.fetchSubcategoriesByCategory(dashboardCategory);
+    this.dashboardService.openCostModal(dashboardCategory);
   }
 }

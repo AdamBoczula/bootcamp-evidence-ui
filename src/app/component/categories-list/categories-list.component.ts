@@ -36,10 +36,9 @@ import { Observable, ObservedValueOf, Subscription } from 'rxjs';
   `,
   styleUrl: './categories-list.component.scss',
 })
-export class CategoriesListComponent implements OnDestroy, OnChanges {
-  private readonly dialog: MatDialog = inject(MatDialog);
-  private dialogRef!: MatDialogRef<AddCostFormComponent, any>;
-  public subs?: Subscription;
+export class CategoriesListComponent /*implements OnDestroy, OnChanges*/ {
+  // private dialogRef!: MatDialogRef<AddCostFormComponent, any>;
+  // public subs?: Subscription;
   @Output()
   onCategoryClick = new EventEmitter<DashboardCategory>();
 
@@ -55,25 +54,25 @@ export class CategoriesListComponent implements OnDestroy, OnChanges {
     this.onCategoryClick.emit(category);
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    (
-      changes['categoryWithSubcategories$'].currentValue as
-        | Observable<CategoryWithSubcategories>
-        | undefined
-    )?.subscribe((categoryWithSubcategories: CategoryWithSubcategories) => {
-      this.subs = this.categoryWithSubcategories$?.subscribe(
-        (categoryWithSub: CategoryWithSubcategories) => {
-          this.dialogRef = this.dialog.open(AddCostFormComponent, {
-            data: categoryWithSubcategories,
-          });
-          this.dialogRef.afterClosed().subscribe((result: any) => {
-            console.log('The dialog was closed:', result);
-          });
-        },
-      );
-    });
-  }
-  ngOnDestroy(): void {
-    this.subs?.unsubscribe();
-  }
+  // ngOnChanges(changes: SimpleChanges): void {
+  //   (
+  //     changes['categoryWithSubcategories$'].currentValue as
+  //       | Observable<CategoryWithSubcategories>
+  //       | undefined
+  //   )?.subscribe((categoryWithSubcategories: CategoryWithSubcategories) => {
+  //     this.subs = this.categoryWithSubcategories$?.subscribe(
+  //       (categoryWithSub: CategoryWithSubcategories) => {
+  //         this.dialogRef = this.dialog.open(AddCostFormComponent, {
+  //           data: categoryWithSubcategories,
+  //         });
+  //         this.dialogRef.afterClosed().subscribe((result: any) => {
+  //           console.log('The dialog was closed:', result);
+  //         });
+  //       },
+  //     );
+  //   });
+  // }
+  // ngOnDestroy(): void {
+  //   this.subs?.unsubscribe();
+  // }
 }

@@ -24,6 +24,8 @@ import {
   DashboardCategory,
 } from '../../dashboard/models/dashboard-category.type';
 import { MatChipsModule } from '@angular/material/chips';
+import { CategoriesListComponent } from '../categories-list/categories-list.component';
+import { ChipsSelectorComponent } from '../chips-selector/chips-selector.component';
 
 @Component({
   selector: 'app-add-cost-form',
@@ -39,12 +41,14 @@ import { MatChipsModule } from '@angular/material/chips';
     ReactiveFormsModule,
     CommonModule,
     MatFormFieldModule,
-    MatChipsModule,
+    CategoriesListComponent,
+    ChipsSelectorComponent,
   ],
   template: `
     <h2 mat-dialog-title>Add {{ category.title }}</h2>
 
     {{ costForm.controls['cost'].value | json }}
+    {{ costForm.controls['subcategory'].value | json }}
 
     <mat-dialog-content>
       <mat-icon
@@ -60,11 +64,16 @@ import { MatChipsModule } from '@angular/material/chips';
           <input type="number" matInput formControlName="cost" />
         </mat-form-field>
 
-        <mat-chip-set aria-label="Subcategories selection">
-          @for (subcategory of category.subcategories; track $index) {
-            <mat-chip>{{ subcategory.name }}</mat-chip>
-          }
-        </mat-chip-set>
+        @if (
+          category &&
+          category.subcategories &&
+          category.subcategories.length > 0
+        ) {
+          <app-chips-selector
+            [chips]="category.subcategories"
+            formControlName="subcategory"
+          />
+        }
       </form>
     </mat-dialog-content>
     <mat-dialog-actions>

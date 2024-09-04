@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { inject, Injectable } from '@angular/core';
+import { BehaviorSubject, Observable, of, take } from 'rxjs';
 import {
   DASHBOARD_CATEGORIES_LIST,
   SUBCATEGORIES,
@@ -10,12 +10,15 @@ import {
 } from './models/dashboard-category.type';
 import { HttpClient } from '@angular/common/http';
 import { MatDialog } from '@angular/material/dialog';
+import { AddCostFormComponent } from '../component/add-cost-form/add-cost-form.component';
 
 @Injectable({
   providedIn: 'root',
 })
 export class DashboardService {
-  constructor(private readonly modal: MatDialog) {}
+  private readonly dialog: MatDialog = inject(MatDialog);
+
+  constructor() {}
 
   private _dashboardCategoriesList$ = new BehaviorSubject<DashboardCategory[]>(
     [],
@@ -36,5 +39,18 @@ export class DashboardService {
     return subcategories
       ? of({ ...dashboardCategory, subcategories } as CategoryWithSubcategories)
       : of({ ...dashboardCategory });
+  }
+
+  public openCostModal(dashboardCategory: DashboardCategory): void {
+    this.fetchSubcategoriesByCategory(dashboardCategory)
+      .pipe(take(1))
+      .subscribe((categoryWithSub: CategoryWithSubcategories) => {
+        const dialogRef = this.dialog.open(AddCostFormComponent, {
+          data: categoryWithSub,
+        });
+        dialogRef.afterClosed().subscribe((result: any) => {
+          console.log('The dialog was closed:', result);
+        });
+      });
   }
 }
