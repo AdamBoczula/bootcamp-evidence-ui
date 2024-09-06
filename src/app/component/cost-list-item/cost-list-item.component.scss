@@ -1,0 +1,18 @@
+:host {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  font-size: 1.5rem;
+
+  mat-icon {
+    width: 2rem;
+    height: 2rem;
+    font-size: 2rem;
+  }
+
+  .name-icon-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+}

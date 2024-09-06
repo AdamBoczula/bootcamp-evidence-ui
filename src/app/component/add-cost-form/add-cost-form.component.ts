@@ -50,7 +50,7 @@ import { ChipSeletorComponent } from '../chip-seletor/chip-seletor.component';
     <mat-dialog-content>
       <mat-icon
         aria-hidden="false"
-        aria-label="Example home icon"
+        aria-label="Selected category icon"
         [fontIcon]="category.icon"
         [ngStyle]="iconStyle"
       ></mat-icon>

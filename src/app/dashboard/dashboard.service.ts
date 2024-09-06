@@ -6,6 +6,7 @@ import {
   SUBCATEGORIES,
 } from './constants/dashboard-categories';
 import {
+  CategoryWithCost,
   CategoryWithSubcategories,
   DashboardCategory,
 } from './models/dashboard-category.type';
@@ -22,8 +23,11 @@ export class DashboardService {
   private _dashboardCategoriesList$ = new BehaviorSubject<DashboardCategory[]>(
     [],
   );
+  private _costStore$ = new BehaviorSubject<CategoryWithCost[]>([]);
+
   public dashboardCategriesList$ =
     this._dashboardCategoriesList$.asObservable();
+  public costStore$ = this._costStore$.asObservable();
 
   public fetchDashboardCategories(): Observable<boolean> {
     this._dashboardCategoriesList$.next([...DASHBOARD_CATEGORIES_LIST]);
@@ -46,8 +50,13 @@ export class DashboardService {
         const dialogRef = this.dialog.open(AddCostFormComponent, {
           data: categoryWithSub,
         });
-        dialogRef.afterClosed().subscribe((result: any) => {
-          console.log('The dialog was closed:', result);
+        dialogRef.afterClosed().subscribe((result?: CategoryWithCost) => {
+          console.log(
+            '🚀 ~ DashboardService ~ dialogRef.afterClosed ~ result:',
+            result,
+          );
+          if (!result) return;
+          this._costStore$.next([...this._costStore$.value, result]);
         });
       },
     );
